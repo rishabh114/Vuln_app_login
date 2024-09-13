@@ -1,0 +1,12 @@
+<h1>Input Page</h1>
+
+<form (ngSubmit)="submitInput()">
+  <label for="userInput">Enter text:</label>
+  <input type="text" id="userInput" [(ngModel)]="userInput" name="userInput">
+  <button type="submit">Submit</button>
+</form>
+
+<div *ngIf="displayInput">
+  <h2>Submitted Input:</h2>
+  <p [innerHTML]="displayInput"></p>
+</div>

@@ -1,0 +1,18 @@
+<h1>Fill Form</h1>
+
+<form (ngSubmit)="submitForm()">
+  <label for="name">Name:</label>
+  <input type="text" id="name" [(ngModel)]="formData.name" name="name">
+  
+  <label for="id">ID:</label>
+  <input type="text" id="id" [(ngModel)]="formData.id" name="id">
+  
+  <label for="mobile">Mobile Number:</label>
+  <input type="text" id="mobile" [(ngModel)]="formData.mobile" name="mobile">
+  
+  <label for="address">Address:</label>
+  <input type="text" id="address" [(ngModel)]="formData.address" name="address">
+  
+  <button type="submit">Submit</button>
+  <button (click)="navigateTo('welcome')">Back</button>
+</form>

@@ -1,0 +1,16 @@
+<div class="login-container">
+    <h2>{{ isLogin ? 'Login' : 'Sign Up' }}</h2>
+    <form (ngSubmit)="loginSignup()">
+      <div class="input-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" [(ngModel)]="username" name="username" required>
+      </div>
+      <div class="input-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" [(ngModel)]="password" name="password" required>
+      </div>
+      <button type="submit">{{ isLogin ? 'Login' : 'Sign Up' }}</button>
+    </form>
+    <p (click)="toggleMode()">{{ isLogin ? 'New user? Sign up here' : 'Already have an account? Login here' }}</p>
+  </div>
+  
