@@ -1,18 +1,46 @@
+import express from 'express';
+import * as fs from 'fs/promises';
+import * as path from 'path';
 import * as http from 'http';
 import { URL } from 'url';
 
-const server = http.createServer(function(req, res) {
-    const target = new URL(req.url || '', "http://example.com").searchParams.get("target"); // Source
+const app = express();
+const port = 8080;
+const BASE_DIR = path.join(__dirname, 'files'); // Directory for file reading
+
+// Endpoint for file reading
+app.get('/file', async (req, res) => {
+    const filePath = req.query.path as string;
+
+    if (filePath) {
+        try {
+            const fullPath = path.resolve(BASE_DIR, filePath);
+            if (!fullPath.startsWith(BASE_DIR)) {
+                res.status(400).send('Invalid file path');
+                return;
+            }
+            const data = await fs.readFile(fullPath, 'utf8');
+            res.status(200).send(data);
+        } catch (err) {
+            res.status(404).send('File not found');
+        }
+    } else {
+        res.status(400).send('Missing path parameter');
+    }
+});
+
+// Insecure redirection endpoint
+app.get('/redirect', (req, res) => {
+    const target = new URL(req.url || '', `http://${req.headers.host}`).searchParams.get('target'); // Source
 
     // Check if target is provided and is a valid string
     if (!target || typeof target !== 'string') {
-        res.writeHead(400, {'Content-Type': 'text/plain'});
-        res.end('Bad Request');
+        res.status(400).send('Bad Request');
         return;
     }
 
     // BAD: `target` is controlled by the attacker
-    http.get('https://' + target + ".example.com/data/", response => {  // Sink
+    http.get('https://' + target + '.example.com/data/', response => { // Sink
         let data = '';
 
         response.on('data', chunk => {
@@ -20,17 +48,13 @@ const server = http.createServer(function(req, res) {
         });
 
         response.on('end', () => {
-            // Process request response ...
-            res.writeHead(200, {'Content-Type': 'text/plain'});
-            res.end(data);
+            res.status(200).send(data);
         });
     }).on('error', err => {
-        res.writeHead(500, {'Content-Type': 'text/plain'});
-        res.end('Internal Server Error');
+        res.status(500).send('Internal Server Error');
     });
 });
 
-const PORT = 3000;
-server.listen(PORT, () => {
-    console.log(`Server is listening on port ${PORT}`);
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
 });
