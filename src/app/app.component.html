@@ -1,6 +1,8 @@
 <div style="text-align:center">
     <h1>Welcome to Vulnerable XSS App!</h1>
+    
     <input type="text" #name placeholder="Enter your name" />
+    
     <a [routerLink]="['/user']" [queryParams]="{ name: name.value }">Show Profile</a>
-</div>
-<router-outlet></router-outlet>
+  </div>
+  <router-outlet></router-outlet>

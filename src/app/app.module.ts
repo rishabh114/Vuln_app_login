@@ -8,6 +8,7 @@ import { LoginSignupComponent } from './login-signup/login-signup.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { FormPageComponent } from './form-page/form-page.component';
 import { InputPageComponent } from './input-page/input-page.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 import { appRoutes } from './app.routes';
 
 @NgModule({
@@ -16,7 +17,8 @@ import { appRoutes } from './app.routes';
     LoginSignupComponent,
     WelcomeComponent,
     FormPageComponent,
-    InputPageComponent
+    InputPageComponent,
+    UserProfileComponent
   ],
   imports: [
     BrowserModule,
