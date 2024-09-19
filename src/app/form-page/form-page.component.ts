@@ -1,41 +1,63 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-form-page',
-  template: `
-    <div>
-      <h1>SQL Injection Example</h1>
-      <textarea [(ngModel)]="userInput" placeholder="Enter SQL query"></textarea>
-      <button (click)="submitQuery()">Submit Query</button>
-      <div *ngIf="result !== undefined">
-        <h3>Result: {{ result }}</h3>
-      </div>
-    </div>
-  `,
-  styles: [`
-    textarea {
-      width: 100%;
-      height: 100px;
-    }
-  `]
+  templateUrl: './form-page.component.html',
+  styleUrls: ['./form-page.component.css'],
 })
-export class FormPageComponent {
-  userInput: string = '';
-  result: string | undefined;
+export class FormPageComponent implements OnInit {
+  formData = {
+    name: '',
+    id: '',
+    mobile: '',
+    address: ''
+  };
+  sanitizedContent: { [key: string]: SafeHtml } = {};
 
-  submitQuery() {
-    // WARNING: This is a vulnerable simulation
-    const unsafeQuery = `SELECT * FROM users WHERE name = '${this.userInput}'`; // Vulnerable SQL query construction
+  constructor(private router: Router, private sanitizer: DomSanitizer) { }
 
-    // Simulating execution of the query
-    this.result = this.executeQuery(unsafeQuery);
+  ngOnInit() {
+    // Load the old form data from localStorage
+    const currentUser = localStorage.getItem('currentUser');
+    if (currentUser) {
+      const storedData = localStorage.getItem(`${currentUser}_formData`);
+      if (storedData) {
+        this.formData = JSON.parse(storedData);
+        this.sanitizeContent(); // Optional: sanitize if needed
+      }
+    }
   }
 
-  executeQuery(query: string): string {
-    // Simulate what would happen if this query were executed
-    console.log('Executing query:', query);
-    // Here we would normally execute the query against a database
-    // For demonstration purposes, we will just return a message
-    return `Query executed: ${query}`;
+  submitForm() {
+    // Save form data
+    const currentUser = localStorage.getItem('currentUser');
+    if (currentUser) {
+      localStorage.setItem(`${currentUser}_formData`, JSON.stringify(this.formData));
+    }
+    this.sanitizeContent();
+
+    // Navigate to the welcome page after saving form data
+    this.router.navigate(['/welcome']).then(success => {
+      if (success) {
+        console.log('Navigation to welcome page successful');
+      } else {
+        console.error('Navigation to welcome page failed');
+      }
+    });
+  }
+
+  sanitizeContent() {
+    this.sanitizedContent = {
+      name: this.sanitizer.bypassSecurityTrustHtml(this.formData.name),
+      id: this.sanitizer.bypassSecurityTrustHtml(this.formData.id),
+      mobile: this.sanitizer.bypassSecurityTrustHtml(this.formData.mobile),
+      address: this.sanitizer.bypassSecurityTrustHtml(this.formData.address),
+    };
+  }
+
+  navigateTo(route: string) {
+    this.router.navigate([`/${route}`]);
   }
 }
