@@ -20,6 +20,7 @@
     "@angular/router": "7.2.15",
     "rxjs": "6.0.0",
     "tslib": "^1.9.0",
+    "unzipper": "^0.12.3",
     "zone.js": "~0.8.29"
   },
   "devDependencies": {
@@ -27,6 +28,7 @@
     "@angular/cli": "7.3.8",
     "@angular/compiler-cli": "7.2.15",
     "@types/jasmine": "3.3.0",
+    "@types/unzipper": "^0.10.10",
     "jasmine-core": "~3.3.0",
     "karma": "~3.1.0",
     "karma-chrome-launcher": "~2.2.0",
