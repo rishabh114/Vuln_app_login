@@ -10,6 +10,7 @@ import { FormPageComponent } from './form-page/form-page.component';
 import { InputPageComponent } from './input-page/input-page.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { appRoutes } from './app.routes';
+import { FileExtractorComponent } from './file-extractor/file-extractor.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { appRoutes } from './app.routes';
     WelcomeComponent,
     FormPageComponent,
     InputPageComponent,
-    UserProfileComponent
+    UserProfileComponent,
+    FileExtractorComponent
   ],
   imports: [
     BrowserModule,
